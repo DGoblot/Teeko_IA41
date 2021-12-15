@@ -40,7 +40,7 @@ class GameJ:
     def movePions(self):
         pass
 
-    def gagner(self, x, y):
+    def gagner(self, x, y):#fonction vérifiant si le pion posé déclanche une victoire
         win = False
         colonne = [self.plateau[i][y] for i in range(len(self.plateau))]
         verif = [1, 1, 1, 1]
@@ -51,14 +51,14 @@ class GameJ:
 
         print(verif)
 
-        if (self.contient(verif, self.plateau[x])):
+        if (self.contient(verif, self.plateau[x])):#vérification d'une victoire en ligne
             win = True
 
-        elif (self.contient(verif, colonne)):
+        elif (self.contient(verif, colonne)):#vérification d'une victoire en colonne
             win = True
             print(self.contient(verif, colonne))
 
-        elif (self.contient(verifCarre, self.plateau[x])):
+        elif (self.contient(verifCarre, self.plateau[x])):#vérification d'une victoire en carré
             carreInfo1 = self.contient(verifCarre, self.plateau[x])
             if (x != 0):
                 carreInfo2 = self.contient(verifCarre, self.plateau[x-1])
@@ -68,6 +68,15 @@ class GameJ:
                 carreInfo2 = self.contient(verifCarre, self.plateau[x+1])
                 if (carreInfo2 and carreInfo1[1] == carreInfo2[1]):
                     win = True
+        else:#verification d'une victoire en diagonale
+            if(x == y and self.contient(verif,[diag[i] for i, diag in enumerate(test.plateau)])):
+                win = True
+            elif(x+y == len(self.plateau) and self.contient(verif,[diag[-i-1] for i, diag in enumerate(test.plateau)])):#vérification sur les deux grandes diagonales
+                win = True
+        #TODO ajouter les verif diagonales manquantes
+        
+
+
 
 
 
