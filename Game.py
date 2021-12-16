@@ -60,14 +60,6 @@ class PlateauJ:
                 return False
 
 
-    def postionAdjecent(self,x,y):
-        pass
-
-    def gagner(self):
-        pass
-
-    def presquegagner(self):
-        pass
 
 
     def jouer(self):
