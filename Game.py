@@ -6,10 +6,10 @@ class GameJ:
 
     # player c'est pour indique qu'
     def __init__(self):
-        self.plateau = [[0, 0, 0, 1, 0],
-                        [0, 0, 1, 0, 0],
-                        [0, 1, 0, 0, 0],
-                        [1, 0, 0, 1, 0],
+        self.plateau = [[0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0],
                         [0, 0, 0, 0, 0]]
         self.player = 1
         self.pions_restant = 8
@@ -27,18 +27,6 @@ class GameJ:
             self.player = -1
         else:
             self.player = 1
-
-    def mettrePions(self, x, y):
-        if (self.plateau[x][y] != 0):
-            return False
-        else:
-            self.plateau[x][y] = self.player
-            self.switchJoueur()
-            self.pions_restant = self.pions_restant - 1
-        pass
-
-    def movePions(self):
-        pass
 
     def gagner(self, x, y):#fonction vérifiant si le pion posé déclanche une victoire
         win = False
@@ -72,33 +60,33 @@ class GameJ:
             if(x == y):
                 if(self.contient(verif,[diag[i] for i, diag in enumerate(self.plateau)])):
                     win = True
-            elif(x+y == 4):
+            if(x+y == 4):
                 if(self.contient(verif,[diag[-i-1] for i, diag in enumerate(self.plateau)])):#vérification sur les deux grandes diagonales
                     win = True
-            elif(x == y-1):
+            if(x == y-1):
                 petiteDiag = []
                 for i in range(4):
                     petiteDiag.append(self.plateau[i][i+1])
-                    if(self.contient(verif,petiteDiag)):
-                        win = True
-            elif(x == y+1):
+                if(self.contient(verif,petiteDiag)):
+                    win = True
+            if(x == y+1):
                 petiteDiag = []
                 for i in range(4):
-                     petiteDiag.append(self.plateau[i][i])
-                     if(self.contient(verif,petiteDiag)):
-                           win = True
-            elif(x+y == 3):
+                    petiteDiag.append(self.plateau[i+1][i])
+                if(self.contient(verif,petiteDiag)):
+                    win = True
+            if(x+y == 3):
                 petiteDiag = []
                 for i in range(4):
                     petiteDiag.append(self.plateau[3-i][i])
-                    if(self.contient(verif,petiteDiag)):
-                        win = True
-            elif(x+y == 5):
+                if(self.contient(verif,petiteDiag)):
+                    win = True
+            if(x+y == 5):
                 petiteDiag = []
                 for i in range(4):
                     petiteDiag.append(self.plateau[4-i][i+1])
-                    if(self.contient(verif,petiteDiag)):
-                        win = True
+                if(self.contient(verif,petiteDiag)):
+                    win = True
 
         if (win == True):
             return self.player
@@ -114,15 +102,5 @@ class GameJ:
                 return True, i
         return False
 
-    def presquegagner(self):
-        pass
-
-    def jouer(self):
-        pass
-
-
-test = GameJ()
-test.__init__()
-print(test.gagner(1, 2))
 # p=PlateauJ()
 # p.affichePl()
