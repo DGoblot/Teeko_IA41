@@ -1,50 +1,87 @@
+import time
+
+
 class GameJ:
 
-    # La valeur 0 dans le plateau indique qu'il n'a pas de pion
-    # La valeur 1 c'est le peon du joueur 1
-    # La valeur -1 c'est le peon du joueur 2 / robot
-
-    # player c'est pour indique qu'
     def __init__(self):
-        self.plateau = [[0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0]]
+        self.plateau = [[0,0,0,0,0],
+                        [0,0,0,0,0],
+                        [0,0,0,0,0],
+                        [0,0,0,0,0],
+                        [0,0,0,0,0]]
         self.player = 1
         self.pions_restant = 8
+        self.phase = 'Mettre'
+        self.temp = 0,0
 
-    def affichePl(self):
-        for i in range(0, 5):
-            for j in range(0, 5):
-                print(str(self.plateau[i][j]) + " ", end=" ")
-
-            print("")
-            print("--------------")
-
-    def switchJoueur(self):
-        if self.player == 1:
-            self.player = -1
+    def switchJoeur(self):
+        if self.player==1:
+            self.player=-1
         else:
-            self.player = 1
+            self.player=1
+
+    def mettrePions(self,x,y):
+        if(self.plateau[x][y]!=0):
+            return  False
+        else:
+            self.plateau[x][y]=self.player
+            self.pions_restant=self.pions_restant-1
+            if self.pions_restant <= 1:
+                self.verifVictoire(x, y)
+            self.switchJoeur()
+            if self.pions_restant == 0:
+                self.phase = 'movePrendre'
+            return True
+
+    def movePionsPrendre(self, ox, oy):
+        if self.plateau[ox][oy] != self.player:
+            return False
+        else:
+            self.temp = ox,oy
+            self.phase = 'movePoser'
+            return True
+
+    def movePionsPoser(self, nx, ny):
+        if nx == self.temp[0] and ny == self.temp[1]:
+            self.phase = 'movePrendre'
+            return True
+        elif self.plateau[nx][ny]!=0:
+            return False
+        else:
+            if nx == self.temp[0] + 1 or nx == self.temp[0] - 1 or nx == self.temp[0]:
+                if ny == self.temp[1] + 1 or ny == self.temp[1] - 1 or ny == self.temp[1]:
+                    self.plateau[self.temp[0]][self.temp[1]] = 0
+                    self.plateau[nx][ny] = self.player
+                    self.verifVictoire(nx, ny)
+                    self.phase = 'movePrendre'
+                    self.switchJoeur()
+                    return True
+                else:
+                    return False
+            else:
+                return False
+
+    def verifVictoire(self, x, y):
+        verif = self.gagner(x, y)
+        if(verif[0]):
+            print("Le joueur " + str(verif[1]) + " a gagné.")
+            exit()
 
     def gagner(self, x, y):#fonction vérifiant si le pion posé déclanche une victoire
         win = False
         colonne = [self.plateau[i][y] for i in range(5)]
-        verif = [1, 1, 1, 1]
-        verifCarre = [1, 1]
+
         if (self.player == -1):
             verif = [-1, -1, -1, -1]
             verifCarre = [-1, -1]
-
-        print(verif)
+        else:
+            verif = [1, 1, 1, 1]
+            verifCarre = [1, 1]
 
         if (self.contient(verif, self.plateau[x])):#vérification d'une victoire en ligne
             win = True
-
         elif (self.contient(verif, colonne)):#vérification d'une victoire en colonne
             win = True
-            print(self.contient(verif, colonne))
 
         elif (self.contient(verifCarre, self.plateau[x])):#vérification d'une victoire en carré
             carreInfo1 = self.contient(verifCarre, self.plateau[x])
@@ -89,9 +126,9 @@ class GameJ:
                     win = True
 
         if (win == True):
-            return self.player
+            return True, self.player
         else:
-            return 0
+            return False, 0
 
     def contient(self, petite, grande):
         for i in range(len(grande) - len(petite) + 1):
@@ -101,6 +138,3 @@ class GameJ:
             else:
                 return True, i
         return False
-
-# p=PlateauJ()
-# p.affichePl()
