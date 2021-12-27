@@ -23,23 +23,41 @@ class GameJ:
         else:
             self.player=1
 
-    def mettrePions(self,x,y):
-        if(self.plateau[x][y]!=0):
+    def mettrePions(self,l,c):
+        if(self.plateau[l][c]!=0):
             return  False
         else:
-            self.plateau[x][y]=self.player
+            self.plateau[l][c]=self.player
             self.pions_restant=self.pions_restant-1
+            self.switchJoeur()
             return  True
 
-    def movePions(self,ox,oy,nx,ny):
-        if self.plateau[ox][oy]==0 :
+    def moviePionsRobot(self,ol,oc,nl,nc,p):
+        if nl == ol + 1 or nl == ol - 1 or nl == ol:
+            if nc == oc or nc == oc + 1 or nc == oc - 1:
+                if self.plateau[nl][nc] == 0:
+                    self.plateau[ol][oc] = 0
+                    self.plateau[nl][nc] = p
+
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+
+
+    def movePions(self,ol,oc,nl,nc):
+        if self.plateau[ol][oc]==0 :
             return False
         else:
-            if nx == ox + 1 or nx == ox - 1 or nx == ox:
-                if ny == oy or ny == oy + 1 or ny == oy - 1:
-                    if self.plateau[nx][ny] == 0:
-                        self.plateau[ox][oy] = 0
-                        self.plateau[nx][ny] = self.player
+            if nl == ol + 1 or nl == ol - 1 or nl == ol:
+                if nc == oc or nc == oc + 1 or nc == oc - 1:
+                    if self.plateau[nl][nc] == 0:
+                        self.plateau[ol][oc] = 0
+                        self.plateau[nl][nc] = self.player
+                        self.switchJoeur()
                         return True
                     else:
                         return False
@@ -49,47 +67,46 @@ class GameJ:
                 return False
 
     def jouer(self):
-        while True:
-            p.affichePl()
+
             print("Le joueur numero " +str(self.player) + " va jouer.")
             if (self.pions_restant == 0):
                 print("Modifier la position de quel pion ?")
                 while True:
                     print("Donner un ox et un oy")
 
-                    ox = int(input())
-                    oy = int(input())
-                    if (ox >= 0 and ox < 5) and (oy >= 0 and oy < 5) and self.plateau[ox][oy]==self.player:
+                    ol = int(input())
+                    oc = int(input())
+                    if (ol >= 0 and ol < 5) and (oc >= 0 and oc < 5) and self.plateau[ol][oc]==self.player:
                         break
                     else:
-                        print("ox ou oy incorrect")
+                        print("old ligne ou old colonne incorrect")
                 print("Quelle nouvelle position ?")
                 while True:
                     print("Donner un nx et un ny")
-                    nx = int(input())
-                    ny = int(input())
-                    if (nx >= 0 and nx < 5) and (ny >= 0 and ny < 5) and self.movePions(ox,oy,nx,ny) :
-                        verif = self.gagner(nx,ny)
-                        if(verif[0]):
-                            print("Le joueur " + str(verif[1]) + " a gagné.")
-                            exit()
-                        self.switchJoeur()
+                    nl = int(input())
+                    nc = int(input())
+                    if (nl >= 0 and nl < 5) and (nc >= 0 and nc < 5) and self.movePions(ol,oc,nl,nc) :
+                        #verif = self.gagner(nl,nc)
+                        #if(verif[0]):
+                        #   print("Le joueur " + str(verif[1]) + " a gagné.")
+                        #   exit()
+                        #self.switchJoeur()
                         break
                     else:
-                        print("nx ou ny incorrect")
+                        print("nl ou nc incorrect")
 
             else:
                 while True:
                     print("Donner un x et un y")
 
-                    x = int(input())
-                    y = int(input())
-                    if (x >= 0 and x < 5) and (y >= 0 and y < 5) and self.mettrePions(x,y):
-                        verif = self.gagner(x,y)
-                        if(verif[0]):
-                            print("Le joueur " + str(verif[1]) + " a gagné.")
-                            exit()
-                        self.switchJoeur()
+                    l = int(input())
+                    c = int(input())
+                    if (l >= 0 and l < 5) and (c >= 0 and c < 5) and self.mettrePions(l,c):
+                        #verif = self.gagner(l,c)
+                        #if(verif[0]):
+                        #    print("Le joueur " + str(verif[1]) + " a gagné.")
+                        #   exit()
+                        #self.switchJoeur()
                         break
                     else:
                         print("x ou y incorrect")
@@ -164,6 +181,15 @@ class GameJ:
                 return True, i
         return False
 
-p=GameJ()
+    def getAdjacent(self, l, c):
+        adjacents = []
+        directions = [
+            [-1, -1], [-1, 0], [-1, +1],
+            [0, -1],           [0, +1],
+            [+1, -1], [+1, 0], [+1, +1],
+        ]
 
-p.jouer()
+        for i in directions:
+            if( 0 <= l + i[0] <= 4 and 0 <= c + i[1] <= 4):
+                adjacents.append([l + i[0],c + i[1]])
+        return adjacents
