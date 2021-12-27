@@ -8,11 +8,18 @@ ia = Ia(game,-1)
 game.affichePl()
 print("\n")
 
-while(game.gagner() == 0):
+while(True):
    game.jouer()
+   print("\n")
+
    game.affichePl()
-   ia.alphaBeta(4)
+   print("\n")
+
+   ia.alphaBeta(3)
+   print("\n")
+
    game.affichePl()
+   print("\n")
 
 print("Game finished!\n")
 if (game.winner() == 1):
