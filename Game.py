@@ -193,3 +193,22 @@ class GameJ:
             if( 0 <= l + i[0] <= 4 and 0 <= c + i[1] <= 4):
                 adjacents.append([l + i[0],c + i[1]])
         return adjacents
+
+
+    def presqueGagner(self,l,c):
+        return  False
+
+    def countAdjacent(self,l,c,type):
+        val=1
+        s=0;
+        if not(type):
+            val=-1
+
+        adjacents=self.getAdjacent(l,c)
+        print(adjacents)
+        for ad in adjacents:
+            if self.plateau[ad[0]][ad[1]]==val:
+                s=s+1
+
+
+        return s
