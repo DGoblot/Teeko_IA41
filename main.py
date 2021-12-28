@@ -3,7 +3,7 @@ from ia import Ia
 
 game = GameJ()
 
-ia = Ia(game,-1)
+ia = Ia(game,-1,1)
 
 game.affichePl()
 print("\n")
@@ -15,7 +15,7 @@ while(True):
    game.affichePl()
    print("\n")
 
-   ia.alphaBeta(3)
+   ia.alphaBeta(1,0)
    print("\n")
 
    game.affichePl()
