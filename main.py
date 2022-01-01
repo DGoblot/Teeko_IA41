@@ -1,21 +1,21 @@
 from Game import GameJ
 from ia import Ia
-
+import time
 game = GameJ()
-
-ia = Ia(game,-1,1)
+ia1 = Ia(game,1,1)
+ia2 = Ia(game,-1,1)
 
 game.affichePl()
 print("\n")
 
 while(True):
-   game.jouer()
-   print("\n")
+   ia1.alphaBeta(1,0)
 
    game.affichePl()
    print("\n")
 
-   ia.alphaBeta(1,0)
+   time.sleep(5)
+   ia2.alphaBeta(1,0)
    print("\n")
 
    game.affichePl()
