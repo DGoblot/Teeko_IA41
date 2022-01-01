@@ -17,12 +17,14 @@ class GameJ:
             print("")
             print("--------------")
 
+    #Passage au joueur suivant
     def switchJoeur(self):
         if self.player==1:
             self.player=-1
         else:
             self.player=1
 
+    #mettre a pion dans une position vide
     def mettrePions(self,l,c):
         if(self.plateau[l][c]!=0):
             return  False
@@ -32,6 +34,7 @@ class GameJ:
             self.switchJoeur()
             return  True
 
+    #Meme fonctionnalite moviePion mais on donner pas la main au joueur suivant
     def moviePionsRobot(self,ol,oc,nl,nc,p):
         if nl == ol + 1 or nl == ol - 1 or nl == ol:
             if nc == oc or nc == oc + 1 or nc == oc - 1:
@@ -47,7 +50,7 @@ class GameJ:
         else:
             return False
 
-
+    #Modifier la position d'un ancien pion par une position adajacent
     def movePions(self,ol,oc,nl,nc):
         if self.plateau[ol][oc]==0 :
             return False
@@ -65,6 +68,7 @@ class GameJ:
                     return False
             else:
                 return False
+
 
     def jouer(self):
 
@@ -181,6 +185,7 @@ class GameJ:
                 return True, i
         return False
 
+    #tavleau qui contient les coordonnées des pions adjancents
     def getAdjacent(self, l, c):
         adjacents = []
         directions = [
@@ -195,9 +200,7 @@ class GameJ:
         return adjacents
 
 
-    def presqueGagner(self,l,c):
-        return  False
-
+    # le nombre de pion adjacent du meme joueur
     def countAdjacent(self,l,c,type):
         val=1
         s=0;
@@ -205,7 +208,7 @@ class GameJ:
             val=-1
 
         adjacents=self.getAdjacent(l,c)
-        print(adjacents)
+
         for ad in adjacents:
             if self.plateau[ad[0]][ad[1]]==val:
                 s=s+1
