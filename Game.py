@@ -1,11 +1,9 @@
+import itertools
+
 class GameJ:
 
     def __init__(self):
-        self.plateau = [[0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0]]
+        self.plateau = [[0 for _ in range(5)] for _ in range(5)]
         self.player = 1
         self.pions_restant = 8
         self.phase = 'Mettre'#Variable permettant de savoir quelle action sera effectuée lorsque l'utilisateur clique
@@ -13,17 +11,10 @@ class GameJ:
                             #                 'PrendrePion' indique la phase de choix du pion à deplacer
                             #                 'PoserPion' indique la phase de pose du pion qui vient d'être pris
         self.temp = 0, 0#Variable indiqué le pion qui va être deplacé
-        self.visualisation = [[0, 0, 0, 0, 0],
-                              [0, 0, 0, 0, 0],
-                              [0, 0, 0, 0, 0],
-                              [0, 0, 0, 0, 0],
-                              [0, 0, 0, 0, 0]]#Cette variable permet d'indiquer au joueur ou peut-il poser le pion pris
+        self.visualisation = [[0 for _ in range(5)] for _ in range(5)] #Cette variable permet d'indiquer au joueur ou peut-il poser le pion pris
 
     def switchJoeur(self):
-        if self.player == 1:
-            self.player = -1
-        else:
-            self.player = 1
+        self.player = -self.player
 
     def mettrePions(self, x, y):#Fonction permetant de poser les pions initiaux
         if (self.plateau[x][y] != 0):
@@ -71,10 +62,7 @@ class GameJ:
                     self.phase = 'movePrendre'
                     self.switchJoeur()
                     return True
-                else:
-                    return False
-            else:
-                return False
+        return False
 
     def moviePionsRobot(self,ol,oc,nl,nc,p):
         if nl == ol + 1 or nl == ol - 1 or nl == ol:
@@ -174,28 +162,17 @@ class GameJ:
         return False
 
     def getAdjacent(self, l, c):
-        adjacents = []
-        directions = [
-            [-1, -1], [-1, 0], [-1, +1],
-            [0, -1], [0, +1],
-            [+1, -1], [+1, 0], [+1, +1],
+        directions = itertools.product((range(l - 1, l + 2), range(c - 1, c + 2))
+        diretions.remove((l, c))
+        return [
+            [row, col] for row, col in directions
+            if 0 <= row < 4 and 0 <= col < 4
         ]
-
-        for i in directions:
-            if (0 <= l + i[0] <= 4 and 0 <= c + i[1] <= 4):
-                adjacents.append([l + i[0], c + i[1]])
-        return adjacents
 
     # le nombre de pion adjacent du meme joueur
     def countAdjacent(self, l, c, type):
         val = 1
-        s = 0
         if not (type):
             val = -1
-
         adjacents = self.getAdjacent(l, c)
-
-        for ad in adjacents:
-            if self.plateau[ad[0]][ad[1]] == val:
-                s = s + 1
-        return s
+        return sum(1 for row, col in adjacents if self.plateau[row][col] == val)
